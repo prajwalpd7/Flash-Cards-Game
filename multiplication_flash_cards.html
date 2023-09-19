@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Multiplication Flash Cards</title>
+    <style>
+      body.dark-mode {
+        background-color: #333;
+        color: #eee;
+      }
+      #question {
+        font-size: 2em;
+        margin-bottom: 20px;
+      }
+      .choice {
+        margin: 10px;
+        padding: 20px;
+        background-color: #ccc;
+        display: inline-block;
+        cursor: pointer;
+      }
+      body.dark-mode .choice {
+        background-color: #555;
+      }
+      .choice:hover {
+        background-color: #aaa;
+      }
+      #wrongStack {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <label for="tableRange">Select Table Range: </label>
+    <input id="tableRange" type="text" placeholder="e.g. 3-12" />
+    <button onclick="startGame()">Start Game</button>
+    <div id="question"></div>
+    <div id="choices"></div>
+    <div id="wrongStack"></div>
+
+    <script>
+      let score = 0;
+      let rangeStart = 0;
+      let rangeEnd = 0;
+      let wrongStack = [];
+
+      function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+      }
+
+      function startGame() {
+        const range = document.getElementById("tableRange").value.split("-");
+        rangeStart = parseInt(range[0]);
+        rangeEnd = parseInt(range[1]);
+        wrongStack = [];
+        updateWrongStack();
+        generateQuestion();
+      }
+
+      function updateWrongStack() {
+        const stackDiv = document.getElementById("wrongStack");
+        stackDiv.innerHTML = "Wrong Stack: " + wrongStack.join(", ");
+      }
+
+      function generateQuestion() {
+        const num1 =
+          Math.floor(Math.random() * (rangeEnd - rangeStart + 1)) + rangeStart;
+        const num2 =
+          Math.floor(Math.random() * (rangeEnd - rangeStart + 1)) + rangeStart;
+        const correctAnswer = num1 * num2;
+        const questionString = `${num1} x ${num2}`;
+
+        document.getElementById(
+          "question"
+        ).textContent = `${questionString} = ?`;
+
+        let choices = [];
+
+        while (choices.length < 4) {
+          const offset = Math.floor(Math.random() * 5) - 2; // offset from -2 to 2
+          const wrongAnswer = correctAnswer + offset;
+          if (wrongAnswer !== correctAnswer && !choices.includes(wrongAnswer)) {
+            choices.push(wrongAnswer);
+          }
+        }
+
+        choices.push(correctAnswer);
+        choices.sort(() => Math.random() - 0.5);
+
+        const choicesDiv = document.getElementById("choices");
+        choicesDiv.innerHTML = "";
+
+        for (const choice of choices) {
+          const choiceDiv = document.createElement("div");
+          choiceDiv.className = "choice";
+          choiceDiv.textContent = choice;
+          choiceDiv.addEventListener("click", function () {
+            if (choice === correctAnswer) {
+              score++;
+              const index = wrongStack.indexOf(questionString);
+              if (index > -1) {
+                wrongStack.splice(index, 1);
+              }
+              alert("Correct! Your score is: " + score); // Replace with sound for correct answer
+            } else {
+              if (!wrongStack.includes(questionString)) {
+                wrongStack.push(questionString);
+              }
+              alert("Wrong! Your score is: " + score); // Replace with sound for wrong answer
+            }
+            updateWrongStack();
+            generateQuestion();
+          });
+          choicesDiv.appendChild(choiceDiv);
+        }
+      }
+    </script>
+  </body>
+</html>
