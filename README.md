@@ -1,4 +1,3 @@
----
 
 # Multiplication Flash Cards Game
 
