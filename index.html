@@ -3,9 +3,17 @@
   <head>
     <title>Multiplication Flash Cards</title>
     <style>
+      body {
+        background-color: #fff; 
+        color: #000; 
+        text-align: center; 
+        font-family: Arial, sans-serif; 
+      }
       body.dark-mode {
         background-color: #333;
         color: #eee;
+        text-align: center; 
+        font-family: Arial, sans-serif; 
       }
       #question {
         font-size: 2em;
@@ -18,14 +26,14 @@
         display: inline-block;
         cursor: pointer;
       }
-      body.dark-mode .choice {
-        background-color: #555;
-      }
       .choice:hover {
         background-color: #aaa;
       }
       #wrongStack {
         margin-top: 20px;
+      }
+      input, button, label {
+        margin: 5px;
       }
     </style>
   </head>
@@ -101,12 +109,12 @@
               if (index > -1) {
                 wrongStack.splice(index, 1);
               }
-              alert("Correct! Your score is: " + score); // Replace with sound for correct answer
+              alert("Correct! Your score is: " + score);
             } else {
               if (!wrongStack.includes(questionString)) {
                 wrongStack.push(questionString);
               }
-              alert("Wrong! Your score is: " + score); // Replace with sound for wrong answer
+              alert("Wrong! Your score is: " + score);
             }
             updateWrongStack();
             generateQuestion();
